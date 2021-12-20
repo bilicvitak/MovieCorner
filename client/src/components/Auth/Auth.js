@@ -5,6 +5,7 @@ import useStyles from './styles';
 import { Button, Grid, Paper, Typography, Container } from '@mui/material';
 import logo from '../../images/logo.png';
 import Input from './Input';
+import { signin, signup } from '../../actions/auth';
 
 const initialState = {
     name: '',
@@ -18,21 +19,23 @@ function Auth() {
     const [showPassword, setShowPassword] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
     const [formData, setFormData] = useState(initialState);
-    //const dispatch = useDispatch();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword);
+
     const switchMode = () => {
         setIsSignUp((prevIsSignUp) => !prevIsSignUp);
         setShowPassword(false);
-    }
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
         if (isSignUp) {
-            //dispatch(signup(formData, history))
+            dispatch(signup(formData, navigate));
         } else {
-            //dispatch(signin(formData, history))
+            dispatch(signin(formData, navigate));
         }
     };
 
@@ -44,7 +47,7 @@ function Auth() {
         <Container maxWidth='xs' style={{ padding: '40px', textAlign: 'center' }}>
             <NavLink to="/"><img src={logo} height="120px" alt="logo" /></NavLink>
             <Paper className={classes.paper}>
-                <Typography variant="h5" style={{ fontWeight: '500'}}>
+                <Typography variant="h5" style={{ fontWeight: '500' }}>
                     {isSignUp ? 'SIGN UP' : 'SIGN IN'}
                 </Typography>
                 <form className={classes.form} onSubmit={handleSubmit}>

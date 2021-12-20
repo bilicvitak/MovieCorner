@@ -1,11 +1,37 @@
-import { Button, Grid, TextField, Box } from '@mui/material';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Button, Grid, TextField, Box, Typography } from '@mui/material';
 import logo from '../../images/logo.png';
 import useStyles from './styles';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import decode from 'jwt-decode';
+
 
 function Header() {
     const classes = useStyles();
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        const token = user?.token;
+
+        if (token) {
+            const decodedToken = decode(token);
+
+            if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+        }
+
+        setUser(JSON.parse(localStorage.getItem('profile')));
+
+    }, [location]);
+
+    const logout = () => {
+        dispatch({ type: 'LOGOUT' });
+        setUser(null);
+        navigate('/');
+    };
 
     return (
         <Box>
@@ -17,10 +43,17 @@ function Header() {
                     <img src={logo} height="80" alt="logo" />
                 </Grid>
                 <Grid item>
-                    <Button component={Link} to="/auth" className={classes.button} variant="contained">SIGN IN</Button>
+                    {user ? (
+                        <div className={classes.userDiv}>
+                            <Typography className={classes.userName}>{user?.result.name}</Typography>
+                            <Button variant="contained" className={classes.button} onClick={logout}>LOGOUT</Button>
+                        </div>
+                    ) : (
+                        <Button component={Link} to="/auth" className={classes.button} variant="contained">SIGN IN</Button>
+                    )}
                 </Grid>
             </Grid>
-        </Box>
+        </Box >
     );
 }
 

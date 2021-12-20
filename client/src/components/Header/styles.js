@@ -11,5 +11,13 @@ export default makeStyles((theme) => ({
         fontSize: "18 pt !important",
         fontWeight: "bold !important",
         letterSpacing: "1px !important"
+    },
+    userDiv: {
+        display: 'flex',
+        alignItems: 'center'
+    },
+    userName: {
+        color: '#f0f0f0',
+        paddingRight: '20px'
     }
 }));

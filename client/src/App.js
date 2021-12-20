@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './components/Home/Home';
 import Auth from './components/Auth/Auth';
 import { ThemeProvider, createTheme } from '@mui/material';
+import { Provider } from 'react-redux';
 
 function App() {
     const theme = createTheme({
@@ -26,12 +27,12 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/auth" element={<Auth />} />
-                </Routes>
-            </BrowserRouter>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/auth" element={<Auth />} />
+                    </Routes>
+                </BrowserRouter>
         </ThemeProvider>
     );
 }
