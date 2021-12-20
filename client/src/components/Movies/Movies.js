@@ -1,0 +1,22 @@
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Grid, CircularProgress } from '@mui/material';
+import Movie from './Movie/Movie';
+
+function Movies() {
+    const movies = [] //useSelector((state) => state.movies);
+
+    return (
+        !movies.length ? <CircularProgress /> : (
+            <Grid container alignItems="stretch" spacing={3} >
+                {movies.map((movie) => (
+                    <Grid item key={movie._id} xs={12} sm={6}>
+                        <Movie />
+                    </Grid>
+                ))}
+            </Grid>
+        )
+    );
+}
+
+export default Movies;
