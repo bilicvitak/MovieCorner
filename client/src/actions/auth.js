@@ -1,5 +1,5 @@
 import * as api from '../api';
-import { AUTH } from '../constants/actionTypes';
+import { AUTH, LOGOUT, TOKEN } from '../constants/actionTypes';
 
 export const signin = (formData, navigate) => async (dispatch) => {
     try {
@@ -22,6 +22,28 @@ export const signup = (formData, navigate) => async (dispatch) => {
 
         navigate('/');
     } catch (error) {
+        console.log(error);
+    }
+}
+
+export const logout = (token, navigate) => async (dispatch) => {
+    try {
+        await api.logout(token);
+
+        dispatch({ type: LOGOUT });
+
+        navigate('/');
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const getNewToken = (refreshToken) => async(dispatch) => {
+    try {
+        const { data } = await api.getNewToken(refreshToken);
+
+        dispatch({ type: TOKEN, data });
+    } catch (error){
         console.log(error);
     }
 }

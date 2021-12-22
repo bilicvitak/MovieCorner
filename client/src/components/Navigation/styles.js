@@ -4,7 +4,7 @@ export default makeStyles((theme) => ({
     text: {
         color: '#f0f0f0 !important',
         '&:hover': {
-            fontSize: '18pt'
+            fontSize: '14pt'
         }
     }
 }));

@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './components/Home/Home';
 import Auth from './components/Auth/Auth';
 import { ThemeProvider, createTheme } from '@mui/material';
-import { Provider } from 'react-redux';
+import { ALL_MOVIES, GENRES, HOME, LATEST, TOP_RATED } from './constants/actionTypes';
 
 function App() {
     const theme = createTheme({
@@ -27,12 +27,17 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/auth" element={<Auth />} />
-                    </Routes>
-                </BrowserRouter>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Home filter={HOME}/>} />
+                    <Route path="/home" element={<Home filter={HOME} />} />
+                    <Route path="/latest" element={<Home filter={LATEST} />} />
+                    <Route path="/top-rated" element={<Home filter={TOP_RATED} />} />
+                    <Route path="/genres" element={<Home filter={GENRES} />} />
+                    <Route path="/all-movies" element={<Home filter={ALL_MOVIES} />} />
+                    <Route path="/auth" element={<Auth />} />
+                </Routes>
+            </BrowserRouter>
         </ThemeProvider>
     );
 }

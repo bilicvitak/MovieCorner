@@ -1,3 +1,122 @@
-export const getMovies = (req, res) => {
-    res.send('Movie router works!');
+import Movie from '../models/movie.js';
+import mongoose from 'mongoose';
+
+export const getAllMovies = async (req, res) => {
+    try {
+        const movies = await Movie.find();
+
+        res.status(200).json(movies);
+    } catch (error) {
+        res.status(404).json({ message: error });
+    }
+}
+
+export const getRandomMovies = async (req, res) => {
+    try {
+        const count = await Movie.count();
+
+        var random = Math.floor(Math.random() * (count - 6));
+
+        const movies = await Movie.find().limit(6).skip(random);
+
+        res.status(200).json(movies);
+
+    } catch (error) {
+        res.status(404).json({ message: error });
+    }
+}
+
+export const getRandomMoviesByUser = async (req, res) => {
+    const { id: _id } = req.params;
+
+    try {
+        const count = await Movie.count();
+
+        var random = Math.floor(Math.random() * (count - 6));
+
+        const movies = await Movie.find().limit(6).skip(random);
+
+        res.status(200).json(movies);
+
+    } catch (error) {
+        res.status(404).json({ message: error });
+    }
+}
+
+export const watchMovie = async (req, res) => {
+    const { id: _id } = req.params;
+
+    if (!req.userId) return res.status(403).json({ message: 'Unauthenticated' });
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No movie with that id');
+
+    const movie = await Movie.findById(_id);
+
+    const index = movie.watched.findIndex((id) => id === String(req.userId));
+
+    if (index === -1) {
+        movie.watched.push(req.userId);
+    } else {
+        movie.watched = movie.watched.filter((id) => id !== String(req.userId));
+    }
+
+    const updatedMovie = await Movie.findByIdAndUpdate(_id, movie, { new: true });
+
+    res.status(200).json(updatedMovie);
+}
+
+export const likeMovie = async (req, res) => {
+    const { id: _id } = req.params;
+
+    if (!req.userId) return res.status(403).json({ message: 'Unauthenticated' });
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No movie with that id');
+
+    const movie = await Movie.findById(_id);
+
+    var index = movie.likes.findIndex((id) => id === String(req.userId));
+
+    if (index === -1) {
+        movie.likes.push(req.userId);
+    } else {
+        movie.likes = movie.watched.filter((id) => id !== String(req.userId));
+    }
+
+    index = movie.dislikes.findIndex((id) => id === String(req.userId));
+
+    if (index !== -1) {
+        movie.dislikes = movie.watched.filter((id) => id !== String(req.userId));
+    }
+
+    const updatedMovie = await Movie.findByIdAndUpdate(_id, movie, { new: true });
+
+    res.status(200).json(updatedMovie);
+}
+
+export const dislikeMovie = async (req, res) => {
+    const { id: _id } = req.params;
+
+    if (!req.userId) return res.status(403).json({ message: 'Unauthenticated' });
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No movie with that id');
+
+    const movie = await Movie.findById(_id);
+
+    var index = movie.dislikes.findIndex((id) => id === String(req.userId));
+
+    if (index === -1) {
+        movie.dislikes.push(req.userId);
+    } else {
+        movie.dislikes = movie.watched.filter((id) => id !== String(req.userId));
+    }
+
+    index = movie.likes.findIndex((id) => id === String(req.userId));
+
+    if (index !== -1) {
+        movie.likes = movie.watched.filter((id) => id !== String(req.userId));
+    }
+
+    const updatedMovie = await Movie.findByIdAndUpdate(_id, movie, { new: true });
+
+    res.status(200).json(updatedMovie);
 }

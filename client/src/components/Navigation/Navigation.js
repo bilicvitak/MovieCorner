@@ -1,19 +1,16 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
-import useStyles from './styles';
 import CustomLink from './CustomLink';
 
 function Navigation() {
-    const classes = useStyles();
-
     return (
         <Box>
             <Grid container alignItems='strech' justifyContent='space-between' spacing={5}>
-                <CustomLink label='HOME'/>
-                <CustomLink label='LATEST' />
-                <CustomLink label='TOP RATED' />
-                <CustomLink label='GENRES' />
-                <CustomLink label='MY LIST' />
+                <CustomLink label='HOME' uri='/home' />
+                <CustomLink label='LATEST' uri='/latest' />
+                <CustomLink label='TOP RATED' uri='/top-rated' />
+                <CustomLink label='GENRES' uri='/genres' />
+                <CustomLink label='ALL MOVIES' uri='/all-movies' />
             </Grid>
         </Box>
     );

@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
-import authReducers from './auth';
+import auth from './auth';
+import movies from './movies';
 
-export const reducers = combineReducers({ authReducers });
+export const reducers = combineReducers({ movies, auth });

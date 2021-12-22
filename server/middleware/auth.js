@@ -1,4 +1,7 @@
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const auth = async (req, res, next) => {
     try {
@@ -7,10 +10,12 @@ const auth = async (req, res, next) => {
 
         let decodedData;
 
-        if(token && isCustomAuth){
-            decodedData = jwt.verify(token, 'test');
+        if (token && isCustomAuth) {
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
+                if (err) return res.status(403).json({ message: 'Access token is not valid.' });
 
-            req.userId = decodedData?.id;
+                req.userId = decodedData?.id;
+            });
         } else {
             decodedData = jwt.decode(token);
 
