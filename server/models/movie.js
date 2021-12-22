@@ -11,9 +11,9 @@ const movieSchema = mongoose.Schema({
     genres: { type: [String], required: true },
     img_uri: { type: String, required: true },
     plot: { type: String, required: true },
-    likes: { type: [String], default: []},
-    dislikes: { type: [String], default: []},
-    watched: { type: [String], default: []},
+    likes: { type: [String], default: [], required: true},
+    dislikes: { type: [String], default: [], required: true},
+    watched: { type: [String], default: [], required: true},
     id: String
 });
 

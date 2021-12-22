@@ -5,7 +5,7 @@ import Header from '../Header/Header';
 import Navigation from '../Navigation/Navigation';
 import Movies from '../Movies/Movies';
 import useStyles from './styles';
-import { getAllMovies, getRandomMovies } from '../../actions/movies';
+import { getAllMovies, getRandomMovies, getLatestMovies, getTopRatedMovies, getMoviesByGenre } from '../../actions/movies';
 import { ALL_MOVIES, HOME, LATEST, TOP_RATED, GENRES } from '../../constants/actionTypes';
 
 function Home({ filter }) {
@@ -20,22 +20,19 @@ function Home({ filter }) {
                 dispatch(getRandomMovies(user?.result?._id));
                 break;
             case LATEST:
-                console.log('Latest not yet implemented');
+                dispatch(getLatestMovies());
                 break;
-                //dispatch(getRadnomMovies()); // getLatestMovies
             case TOP_RATED:
-                console.log('Top rated not yet implemented');
+                dispatch(getTopRatedMovies());
                 break;
-                //dispatch(getRadnomMovies()); // getTopRatedMovies
             case GENRES:
-                console.log('Genres not yet implemented');
+                dispatch(getMoviesByGenre());
                 break;
-                //dispatch(getRadnomMovies()); // getGenres
             case ALL_MOVIES:
                 dispatch(getAllMovies());
                 break;
             default:
-                dispatch(getRandomMovies(user?.result?._id)); // getAllMovies
+                dispatch(getRandomMovies(user?.result?._id));
         }
     }, [currentId, dispatch]);
 

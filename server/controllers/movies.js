@@ -7,39 +7,71 @@ export const getAllMovies = async (req, res) => {
 
         res.status(200).json(movies);
     } catch (error) {
-        res.status(404).json({ message: error });
+        res.status(404).json({ message: error.message });
     }
 }
 
 export const getRandomMovies = async (req, res) => {
     try {
-        const count = await Movie.count();
-
-        var random = Math.floor(Math.random() * (count - 6));
-
-        const movies = await Movie.find().limit(6).skip(random);
+        const movies = await Movie.aggregate([{ $sample: { size: 6 } }]);
 
         res.status(200).json(movies);
 
     } catch (error) {
-        res.status(404).json({ message: error });
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const getLatestMovies = async (req, res) => {
+    try {
+        const movies = await Movie.aggregate([{ $sample: { size: 6 } }, { $sort: { year: -1 } }]);
+
+        res.status(200).json(movies);
+
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const getTopRatedMovies = async (req, res) => {
+    try {
+        const movies = await Movie.aggregate([{ $sample: { size: 6 } }, { $sort: { imdb_rating: -1 } }]);
+
+        res.status(200).json(movies);
+
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const getMoviesByGenre = async (req, res) => {
+    const genres = ['action', 'adult', 'adventure', 'animation', 'anime', 'biography',
+        'comedy', 'crime', 'documentary', 'drama', 'family', 'fantasy', 'film-noir',
+        'history', 'horror', 'music', 'musical', 'mystery', 'reality-tv', 'romance',
+        'sci-fi', 'science fiction', 'short', 'sport', 'tv movie', 'thriller', 'war',
+        'western', 'science-fiction'];
+
+    var genre = genres[Math.floor(Math.random() * genres.length)];
+
+    const regex = new RegExp(genre, 'i');
+
+    try {
+        const movies = await Movie.aggregate([{ $match: { genres: regex } }, { $sample: { size: 6 } }]);
+
+        res.status(200).json(movies);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
     }
 }
 
 export const getRandomMoviesByUser = async (req, res) => {
-    const { id: _id } = req.params;
-
     try {
-        const count = await Movie.count();
-
-        var random = Math.floor(Math.random() * (count - 6));
-
-        const movies = await Movie.find().limit(6).skip(random);
+        const movies = await Movie.aggregate().sample(6);
 
         res.status(200).json(movies);
 
     } catch (error) {
-        res.status(404).json({ message: error });
+        res.status(404).json({ message: error.message });
     }
 }
 

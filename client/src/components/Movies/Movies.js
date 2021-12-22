@@ -11,7 +11,7 @@ function Movies({ setCurrentId }) {
             <Grid container alignItems="stretch" spacing={3} >
                 {movies.map((movie) => (
                     <Grid item key={movie._id} xs={12} sm={4}>
-                        <Movie movie={movie} setCurrentId={setCurrentId}/>
+                        <Movie movie={movie} />
                     </Grid>
                 ))}
             </Grid>

@@ -9,11 +9,12 @@ import StarIcon from "@mui/icons-material/Star";
 import useStyles from './styles';
 import { watchMovie, likeMovie, dislikeMovie } from '../../../actions/movies';
 
-function Movie({ movie, setCurrentId }) {
+function Movie({ movie }) {
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem('profile'));
     const classes = useStyles();
     const disabled = Boolean(!user?.result);
+    console.log(movie);
 
     const genres = movie.genres == null ? "N/A" : movie.genres.map((genre, i) => {
         var genres = genre;

@@ -16,9 +16,13 @@ export const signUp = (formData) => axios.post('/users/signup', formData);
 export const logout = (token) => axios.post('/users/logout', token);
 export const getNewToken = (refreshToken) => axios.post('/users/token', refreshToken);
 
-export const getRandomMoviesByUser = (id) => axios.get(`/movies/random/${id}`);
 export const getRandomMovies = () => axios.get('/movies/random');
 export const getAllMovies = () => axios.get('/movies');
+export const getLatestMovies = () => axios.get('/movies/latest');
+export const getTopRatedMovies = () => axios.get('/movies/top-rated');
+export const getMoviesByGenre = () => axios.get('/movies/genres');
+
+export const getRandomMoviesByUser = () => axios.get(`/movies/random/user`);
 export const watchMovie = (id) => axios.patch(`/movies/watch/${id}`);
 export const likeMovie = (id) => axios.patch(`/movies/like/${id}`);
 export const dislikeMovie = (id) => axios.patch(`/movies/dislike/${id}`);

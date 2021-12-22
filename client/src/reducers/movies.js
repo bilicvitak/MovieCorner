@@ -1,9 +1,12 @@
-import { DISLIKE, GET_ALL, GET_RANDOM, LIKE, WATCH } from "../constants/actionTypes";
+import { DISLIKE, GET_ALL, GET_BY_GENRE, GET_LATEST, GET_RANDOM, GET_TOP_RATED, LIKE, WATCH } from "../constants/actionTypes";
 
 const moviesReducer = (movies = [], action) => {
     switch (action.type) {
         case GET_RANDOM:
         case GET_ALL:
+        case GET_LATEST:
+        case GET_TOP_RATED:
+        case GET_BY_GENRE:
             return action.payload;
         case WATCH:
         case LIKE:
