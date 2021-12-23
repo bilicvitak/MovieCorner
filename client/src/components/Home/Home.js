@@ -20,16 +20,16 @@ function Home({ filter }) {
                 dispatch(getRandomMovies(user?.result?._id));
                 break;
             case LATEST:
-                dispatch(getLatestMovies());
+                dispatch(getLatestMovies(user?.result?._id));
                 break;
             case TOP_RATED:
-                dispatch(getTopRatedMovies());
+                dispatch(getTopRatedMovies(user?.result?._id));
                 break;
             case GENRES:
-                dispatch(getMoviesByGenre());
+                dispatch(getMoviesByGenre(user?.result?._id));
                 break;
             case ALL_MOVIES:
-                dispatch(getAllMovies());
+                dispatch(getAllMovies(user?.result?._id));
                 break;
             default:
                 dispatch(getRandomMovies(user?.result?._id));

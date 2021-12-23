@@ -1,6 +1,45 @@
 import Movie from '../models/movie.js';
 import mongoose from 'mongoose';
 
+const getMoviesByPreference = async (id) => {
+    const result = await Movie.find({ $or: [{ likes: id }, { watched: id }] });
+
+    return result;
+}
+
+const getMinMaxYear = (movies) => {
+    var years = [];
+
+    movies.forEach((movie) => { years.push(movie.year) });
+
+    var max = Math.max.apply(Math, years);
+    var min = Math.min.apply(Math, years);
+
+    const maxMin = [max, min];
+
+    return maxMin;
+}
+
+const getAvgRating = (movies) => {
+    var ratings = [];
+
+    movies.forEach((movie) => { ratings.push(movie.imdb_rating) });
+
+    const average = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+
+    const avg = parseFloat(average(ratings).toFixed(2));
+
+    return avg;
+}
+
+const getGenres = (movies) => {
+    var genres = [];
+
+    movies.forEach((movie) => { movie.genres.forEach((genre) => genres.push(new RegExp(genre, 'i'))) });
+
+    return genres;
+}
+
 export const getAllMovies = async (req, res) => {
     try {
         const movies = await Movie.find();
@@ -45,18 +84,16 @@ export const getTopRatedMovies = async (req, res) => {
 }
 
 export const getMoviesByGenre = async (req, res) => {
-    const genres = ['action', 'adult', 'adventure', 'animation', 'anime', 'biography',
-        'comedy', 'crime', 'documentary', 'drama', 'family', 'fantasy', 'film-noir',
-        'history', 'horror', 'music', 'musical', 'mystery', 'reality-tv', 'romance',
-        'sci-fi', 'science fiction', 'short', 'sport', 'tv movie', 'thriller', 'war',
-        'western', 'science-fiction'];
-
-    var genre = genres[Math.floor(Math.random() * genres.length)];
-
-    const regex = new RegExp(genre, 'i');
-
     try {
-        const movies = await Movie.aggregate([{ $match: { genres: regex } }, { $sample: { size: 6 } }]);
+        var genres = [];
+
+        const result = await Movie.find();
+
+        result.forEach((movie) => { movie.genres.forEach((genre) => genres.push(new RegExp(genre, 'i'))) });
+
+        const genre = genres[Math.floor(Math.random() * genres.length)];
+
+        const movies = await Movie.aggregate([{ $match: { genres: genre } }, { $sample: { size: 6 } }]);
 
         res.status(200).json(movies);
     } catch (error) {
@@ -66,10 +103,85 @@ export const getMoviesByGenre = async (req, res) => {
 
 export const getRandomMoviesByUser = async (req, res) => {
     try {
-        const movies = await Movie.aggregate().sample(6);
+        const result = await getMoviesByPreference(req.userId);
 
-        res.status(200).json(movies);
+        if (result.length === 0) {
+            getRandomMovies(req, res);
+        } else {
+            const years = getMinMaxYear(result);
+            const avg = getAvgRating(result);
+            const genres = getGenres(result);
 
+            const movies = await Movie.aggregate([{
+                $match: {
+                    year: { $lte: years[0], $gte: years[1] },
+                    imdb_rating: { $gte: avg },
+                    genres: { $elemMatch: { $in: genres } }
+                }
+            },
+            { $sample: { size: 6 } }]);
+
+            res.status(200).json(movies);
+        }
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const getLatestMoviesByUser = async (req, res) => {
+    try {
+        const result = await getMoviesByPreference(req.userId);
+
+        if (result.length === 0) {
+            getLatestMovies(req, res);
+        } else {
+            const maxMin = getMinMaxYear(result);
+
+            const movies = await Movie.aggregate([{ $match: { year: { $lte: maxMin[0], $gte: maxMin[1] } } },
+            { $sample: { size: 6 } }, { $sort: { year: -1 } }]);
+
+            res.status(200).json(movies);
+        }
+
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const getTopRatedMoviesByUser = async (req, res) => {
+    try {
+        const result = await getMoviesByPreference(req.userId);
+
+        if (result.length === 0) {
+            getTopRatedMovies(req, res);
+        } else {
+            const avg = getAvgRating(result);
+
+            const movies = await Movie.aggregate([{ $match: { imdb_rating: { $gte: avg } } },
+            { $sample: { size: 6 } }, { $sort: { imdb_rating: -1 } }]);
+
+            res.status(200).json(movies);
+        }
+
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const getMoviesByGenreUser = async (req, res) => {
+    try {
+        const result = await getMoviesByPreference(req.userId);
+
+        if (result.length === 0) {
+            getMoviesByGenre(req, res);
+        } else {
+            var genres = getGenres(result);
+
+            const movies = await Movie.aggregate([{ $match: { genres: { $elemMatch: { $in: genres } } } },
+            { $sample: { size: 6 } }])
+
+            res.status(200).json(movies);
+        }
     } catch (error) {
         res.status(404).json({ message: error.message });
     }

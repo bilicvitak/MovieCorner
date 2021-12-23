@@ -11,9 +11,9 @@ export const getAllMovies = () => async (dispatch) => {
     }
 }
 
-export const getLatestMovies = () => async (dispatch) => {
+export const getLatestMovies = (id) => async (dispatch) => {
     try {
-        const { data } = await api.getLatestMovies();
+        const { data } = (id == null) ? await api.getLatestMovies() : await api.getLatestMoviesByUser();
 
         dispatch({ type: GET_LATEST, payload: data });
     } catch (error) {
@@ -21,9 +21,9 @@ export const getLatestMovies = () => async (dispatch) => {
     }
 }
 
-export const getTopRatedMovies = () => async (dispatch) => {
+export const getTopRatedMovies = (id) => async (dispatch) => {
     try {
-        const { data } = await api.getTopRatedMovies();
+        const { data } = (id == null) ? await api.getTopRatedMovies() : await api.getTopRatedMoviesByUser();
 
         dispatch({ type: GET_TOP_RATED, payload: data });
     } catch (error) {
@@ -31,9 +31,9 @@ export const getTopRatedMovies = () => async (dispatch) => {
     }
 }
 
-export const getMoviesByGenre = () => async (dispatch) => {
+export const getMoviesByGenre = (id) => async (dispatch) => {
     try {
-        const { data } = await api.getMoviesByGenre();
+        const { data } = (id == null) ? await api.getMoviesByGenre() : await api.getMoviesByGenreUser();
 
         dispatch({ type: GET_BY_GENRE, payload: data });
     } catch (error) {

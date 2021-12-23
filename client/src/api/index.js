@@ -22,7 +22,11 @@ export const getLatestMovies = () => axios.get('/movies/latest');
 export const getTopRatedMovies = () => axios.get('/movies/top-rated');
 export const getMoviesByGenre = () => axios.get('/movies/genres');
 
-export const getRandomMoviesByUser = () => axios.get(`/movies/random/user`);
+export const getRandomMoviesByUser = () => axios.get('/movies/random/user');
+export const getLatestMoviesByUser = () => axios.get('/movies/latest/user');
+export const getTopRatedMoviesByUser = () => axios.get('/movies/top-rated/user');
+export const getMoviesByGenreUser = () => axios.get('/movies/genres/user');
+
 export const watchMovie = (id) => axios.patch(`/movies/watch/${id}`);
 export const likeMovie = (id) => axios.patch(`/movies/like/${id}`);
 export const dislikeMovie = (id) => axios.patch(`/movies/dislike/${id}`);
