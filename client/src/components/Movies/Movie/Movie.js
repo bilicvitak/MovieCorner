@@ -14,7 +14,6 @@ function Movie({ movie }) {
     const user = JSON.parse(localStorage.getItem('profile'));
     const classes = useStyles();
     const disabled = Boolean(!user?.result);
-    console.log(movie);
 
     const genres = movie.genres == null ? "N/A" : movie.genres.map((genre, i) => {
         var genres = genre;

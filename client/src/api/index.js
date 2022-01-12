@@ -30,3 +30,4 @@ export const getMoviesByGenreUser = () => axios.get('/movies/genres/user');
 export const watchMovie = (id) => axios.patch(`/movies/watch/${id}`);
 export const likeMovie = (id) => axios.patch(`/movies/like/${id}`);
 export const dislikeMovie = (id) => axios.patch(`/movies/dislike/${id}`);
+export const getMoviesByKeyword = (keyword) => axios.get(`/movies/search/${keyword}`);

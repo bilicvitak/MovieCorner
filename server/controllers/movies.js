@@ -40,6 +40,18 @@ const getGenres = (movies) => {
     return genres;
 }
 
+export const searchMovies = async (req, res) => {
+    try {
+        const { keyword: _keyword } = req.params;
+
+        const movies = await Movie.find({ $text: { $search: _keyword, $caseSensitive: false } });
+
+        res.status(200).json(movies);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
 export const getAllMovies = async (req, res) => {
     try {
         const movies = await Movie.find();

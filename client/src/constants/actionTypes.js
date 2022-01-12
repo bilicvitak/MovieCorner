@@ -19,3 +19,4 @@ export const DISLIKE = 'DISLIKE';
 export const GET_LATEST = 'GET_LATEST';
 export const GET_TOP_RATED = 'GET_TOP_RATED';
 export const GET_BY_GENRE = 'GET_BY_GENRE';
+export const GET_BY_KEYWORD = 'GET_BY_KEYWORD';

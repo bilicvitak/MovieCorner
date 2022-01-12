@@ -1,5 +1,15 @@
 import * as api from '../api';
-import { GET_RANDOM, GET_ALL, WATCH, LIKE, DISLIKE, GET_LATEST, GET_TOP_RATED, GET_BY_GENRE } from '../constants/actionTypes';
+import { GET_RANDOM, GET_ALL, WATCH, LIKE, DISLIKE, GET_LATEST, GET_TOP_RATED, GET_BY_GENRE, GET_BY_KEYWORD } from '../constants/actionTypes';
+
+export const searchMovies = (keyword) => async (dispatch) => {
+    try {
+        const { data } = await api.getMoviesByKeyword(keyword);
+
+        dispatch({ type: GET_BY_KEYWORD, payload: data });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 export const getAllMovies = () => async (dispatch) => {
     try {

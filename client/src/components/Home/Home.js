@@ -29,7 +29,7 @@ function Home({ filter }) {
                 dispatch(getMoviesByGenre(user?.result?._id));
                 break;
             case ALL_MOVIES:
-                dispatch(getAllMovies(user?.result?._id));
+                    dispatch(getAllMovies(user?.result?._id));
                 break;
             default:
                 dispatch(getRandomMovies(user?.result?._id));

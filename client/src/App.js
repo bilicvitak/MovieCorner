@@ -29,7 +29,7 @@ function App() {
         <ThemeProvider theme={theme}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Home filter={HOME}/>} />
+                    <Route path="/" element={<Home filter={HOME} />} />
                     <Route path="/home" element={<Home filter={HOME} />} />
                     <Route path="/latest" element={<Home filter={LATEST} />} />
                     <Route path="/top-rated" element={<Home filter={TOP_RATED} />} />

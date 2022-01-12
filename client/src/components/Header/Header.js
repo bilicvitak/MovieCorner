@@ -7,11 +7,13 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import decode from 'jwt-decode';
 import { logout, getNewToken } from '../../actions/auth';
 import SearchIcon from '@mui/icons-material/Search';
+import { searchMovies } from '../../actions/movies';
 
 
 function Header() {
     const classes = useStyles();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+    const [keyword, setKeyword] = useState("");
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -37,21 +39,25 @@ function Header() {
         setUser(null);
     };
 
+    const handleChange = (e) => {
+        setKeyword(e.target.value);
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(searchMovies(keyword));
+    }
+
     return (
         <Box>
             <Grid container className={classes.mainGrid}>
                 <Grid item>
-                    <TextField label="Search"
-                        inputProps={{
-                            endAdornment: (<InputAdornment position="end">
-                                <IconButton>
-                                    <SearchIcon />
-                                </IconButton>
-                            </InputAdornment>
-                            )
-                        }}
-                        variant="standard"
-                    />
+                    <form onSubmit={handleSubmit}>
+                        <TextField label="Search" variant="standard" onChange={handleChange} />
+                        <IconButton type="submit">
+                            <SearchIcon />
+                        </IconButton>
+                    </form>
                 </Grid>
                 <Grid item>
                     <img src={logo} height="80" alt="logo" />
