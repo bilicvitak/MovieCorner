@@ -128,7 +128,8 @@ export const getRandomMoviesByUser = async (req, res) => {
                 $match: {
                     year: { $lte: years[0], $gte: years[1] },
                     imdb_rating: { $gte: avg },
-                    genres: { $elemMatch: { $in: genres } }
+                    genres: { $elemMatch: { $in: genres } },
+                    dislikes: { $ne: req.userId.toString() }
                 }
             },
             { $sample: { size: 6 } }]);
@@ -149,7 +150,12 @@ export const getLatestMoviesByUser = async (req, res) => {
         } else {
             const maxMin = getMinMaxYear(result);
 
-            const movies = await Movie.aggregate([{ $match: { year: { $lte: maxMin[0], $gte: maxMin[1] } } },
+            const movies = await Movie.aggregate([{
+                $match: {
+                    year: { $lte: maxMin[0], $gte: maxMin[1] },
+                    dislikes: { $ne: req.userId.toString() }
+                }
+            },
             { $sample: { size: 6 } }, { $sort: { year: -1 } }]);
 
             res.status(200).json(movies);
@@ -169,7 +175,12 @@ export const getTopRatedMoviesByUser = async (req, res) => {
         } else {
             const avg = getAvgRating(result);
 
-            const movies = await Movie.aggregate([{ $match: { imdb_rating: { $gte: avg } } },
+            const movies = await Movie.aggregate([{
+                $match: {
+                    imdb_rating: { $gte: avg },
+                    dislikes: { $ne: req.userId.toString() }
+                }
+            },
             { $sample: { size: 6 } }, { $sort: { imdb_rating: -1 } }]);
 
             res.status(200).json(movies);
@@ -189,7 +200,12 @@ export const getMoviesByGenreUser = async (req, res) => {
         } else {
             var genres = getGenres(result);
 
-            const movies = await Movie.aggregate([{ $match: { genres: { $elemMatch: { $in: genres } } } },
+            const movies = await Movie.aggregate([{
+                $match: {
+                    genres: { $elemMatch: { $in: genres } },
+                    dislikes: { $ne: req.userId.toString() }
+                }
+            },
             { $sample: { size: 6 } }])
 
             res.status(200).json(movies);
