@@ -14,3 +14,6 @@
   <li>U terminalu izvršiti sljedeće naredbe za instalaciju paketa i pokretanje aplikacije: <code> npm i && npm start</code></li>
   <li>Pričekati da se u pregledniku otvori aplikacija</li>
 </ol>
+
+## Dokumentacija
+<a href="https://www.overleaf.com/read/tdwbhtbcrydj">Klikni ovdje</a> za dokumentaciju
