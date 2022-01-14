@@ -1380,3 +1380,10 @@ db.movies.insert(
   }
 ]
 )
+
+
+db.movies.update({},{$set: {"likes":[]}},false,true);
+
+db.movies.update({},{$set: {"dislikes":[]}},false,true);
+
+db.movies.update({},{$set: {"watched":[]}},false,true);
