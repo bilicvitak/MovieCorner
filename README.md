@@ -17,3 +17,6 @@
 
 ## Dokumentacija
 <a href="https://www.overleaf.com/read/tdwbhtbcrydj">Klikni ovdje</a> za dokumentaciju
+
+## Programski kod
+<a href="https://www.youtube.com/watch?v=ngc9gnGgUdA&list=PL6QREj8te1P7VSwhrMf3D3Xt4V6_SRkhu">Poveznica</a> na MERN tečaj korišten pri izradi projekta.
